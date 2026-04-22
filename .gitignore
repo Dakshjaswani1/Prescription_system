@@ -26,3 +26,7 @@ db.sqlite3-journal
 
 # MacOS
 .DS_Store
+
+# Data Seeding Scripts
+seed.py
+seed_dummy_data.py
