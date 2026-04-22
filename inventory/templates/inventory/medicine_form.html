@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - Hospital Prescription System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ title }}</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{% url 'medicine_list' %}" class="btn btn-sm btn-outline-secondary">
+            Back to Inventory
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Medicine Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Medicine Name *</label>
+                            {{ med_form.name }}
+                            {{ med_form.name.errors }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Strength *</label>
+                            {{ med_form.strength }}
+                            {{ med_form.strength.errors }}
+                            <div class="form-text">e.g., 500mg, 10ml</div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Manufacturer *</label>
+                            {{ med_form.manufacturer }}
+                            {{ med_form.manufacturer.errors }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Min Stock Threshold *</label>
+                            {{ med_form.minimum_stock_threshold }}
+                            {{ med_form.minimum_stock_threshold.errors }}
+                            <div class="form-text">Alerts when stock drops below this</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Initial Stock</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Quantity *</label>
+                            {{ stock_form.quantity }}
+                            {{ stock_form.quantity.errors }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Batch Number *</label>
+                            {{ stock_form.batch_number }}
+                            {{ stock_form.batch_number.errors }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Expiry Date *</label>
+                            {{ stock_form.expiry_date }}
+                            {{ stock_form.expiry_date.errors }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
+                <a href="{% url 'medicine_list' %}" class="btn btn-light me-md-2">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save Medicine & Stock</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

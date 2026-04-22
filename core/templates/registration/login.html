@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign In - Hospital Prescription System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5 fade-in">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-center py-4">
+                <i class="bi bi-shield-lock-fill display-4 text-white opacity-75 mb-2 d-block"></i>
+                <h3 class="mb-0 text-white fw-bold">Sign In</h3>
+                <p class="text-white-50 mb-0 mt-1">Please enter your credentials</p>
+            </div>
+            <div class="card-body p-4 p-md-5">
+                <form method="post">
+                    {% csrf_token %}
+                    {% if form.errors %}
+                        <div class="alert alert-danger shadow-sm rounded-3">
+                            <i class="bi bi-exclamation-octagon-fill me-2"></i> Invalid username or password.
+                        </div>
+                    {% endif %}
+                    
+                    <div class="mb-4">
+                        <label for="id_username" class="form-label fw-semibold text-muted">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0"><i class="bi bi-person text-muted"></i></span>
+                            <input type="text" name="username" class="form-control border-start-0 ps-0" id="id_username" required autofocus>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="id_password" class="form-label fw-semibold text-muted">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0"><i class="bi bi-key text-muted"></i></span>
+                            <input type="password" name="password" class="form-control border-start-0 ps-0" id="id_password" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold mb-3 shadow-sm">
+                        <i class="bi bi-box-arrow-in-right me-2"></i> Log In
+                    </button>
+                    
+                    <div class="text-center text-muted">
+                        Don't have an account? <a href="{% url 'signup' %}" class="text-primary fw-bold text-decoration-none">Sign up here</a>
+                    </div>
+                    
+                    <input type="hidden" name="next" value="{{ next|default:'' }}">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

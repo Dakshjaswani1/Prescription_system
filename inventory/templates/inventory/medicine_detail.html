@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Medicine Details - Hospital Prescription System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Medicine Details</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{% url 'medicine_list' %}" class="btn btn-sm btn-outline-secondary me-2">
+            Back to Inventory
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Medicine Info</h5>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">{{ medicine.name }} <span class="text-muted fs-6">{{ medicine.strength }}</span></h4>
+                <p class="text-muted mb-4">Manufacturer: {{ medicine.manufacturer }}</p>
+                
+                <h5 class="border-bottom pb-2">Current Stock</h5>
+                {% if medicine.stock %}
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fs-5">Quantity:</span>
+                        <span class="fs-4 fw-bold {% if medicine.stock.quantity < medicine.minimum_stock_threshold %}text-danger{% else %}text-success{% endif %}">
+                            {{ medicine.stock.quantity }}
+                        </span>
+                    </div>
+                    <p class="mb-1"><strong>Batch:</strong> {{ medicine.stock.batch_number }}</p>
+                    <p class="mb-1"><strong>Expires:</strong> {{ medicine.stock.expiry_date }}</p>
+                    <p class="text-muted small">Threshold: {{ medicine.minimum_stock_threshold }}</p>
+                {% else %}
+                    <p class="text-danger">No stock recorded.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">Inventory Logs</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Action</th>
+                                <th>Qty</th>
+                                <th>User</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in logs %}
+                            <tr>
+                                <td>{{ log.timestamp|date:"Y-m-d H:i" }}</td>
+                                <td>
+                                    {% if log.action == 'ADD' %}
+                                    <span class="badge bg-success">Added</span>
+                                    {% elif log.action == 'DEDUCT' %}
+                                    <span class="badge bg-warning text-dark">Deducted</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">Adjustment</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ log.quantity_changed }}</td>
+                                <td>{{ log.user.username|default:"System" }}</td>
+                                <td><small>{{ log.remarks|default:"" }}</small></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-3">No inventory logs found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

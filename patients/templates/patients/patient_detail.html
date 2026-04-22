@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Patient Details - Hospital Prescription System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Patient Profile</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{% url 'patient_list' %}" class="btn btn-sm btn-outline-secondary me-2">
+            Back to List
+        </a>
+        <a href="#" class="btn btn-sm btn-primary">
+            Edit Patient
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Demographics</h5>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">{{ patient.name }}</h4>
+                <p class="text-muted">ID: #{{ patient.id }}</p>
+                
+                <ul class="list-group list-group-flush mb-3">
+                    <li class="list-group-item d-flex justify-content-between px-0">
+                        <span class="text-muted">Age / Gender:</span>
+                        <strong>{{ patient.age }} / {{ patient.get_gender_display }}</strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between px-0">
+                        <span class="text-muted">Contact:</span>
+                        <strong>{{ patient.contact_number }}</strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between px-0">
+                        <span class="text-muted">Status:</span>
+                        <span class="badge {% if patient.status == 'Active' %}bg-success{% else %}bg-secondary{% endif %}">
+                            {{ patient.status }}
+                        </span>
+                    </li>
+                    <li class="list-group-item px-0">
+                        <span class="text-muted d-block mb-1">Address:</span>
+                        <strong>{{ patient.address|default:"Not provided" }}</strong>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        {% if patient.allergies %}
+        <div class="alert alert-danger shadow-sm mb-4">
+            <h5 class="alert-heading"><i class="bi bi-exclamation-triangle-fill"></i> Allergy Warning</h5>
+            <p class="mb-0">{{ patient.allergies }}</p>
+        </div>
+        {% endif %}
+        
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">Medical History</h5>
+            </div>
+            <div class="card-body">
+                {% if patient.medical_history %}
+                    <p class="card-text" style="white-space: pre-wrap;">{{ patient.medical_history }}</p>
+                {% else %}
+                    <p class="text-muted fst-italic">No medical history recorded.</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Placeholder for Prescriptions -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Prescription History</h5>
+                {% if request.user.role == 'Doctor' %}
+                <a href="#" class="btn btn-sm btn-outline-primary">New Prescription</a>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <p class="text-muted">No prescriptions found for this patient.</p>
+                <!-- We will add the prescription list here later -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

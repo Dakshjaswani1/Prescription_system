@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Register Patient - Hospital Prescription System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ title }}</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{% url 'patient_list' %}" class="btn btn-sm btn-outline-secondary">
+            Back to List
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <h5 class="mb-3 border-bottom pb-2">Demographics</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Name *</label>
+                            {{ form.name }}
+                            {{ form.name.errors }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Age *</label>
+                            {{ form.age }}
+                            {{ form.age.errors }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Gender *</label>
+                            {{ form.gender }}
+                            {{ form.gender.errors }}
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Contact Number *</label>
+                            {{ form.contact_number }}
+                            {{ form.contact_number.errors }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Status</label>
+                            {{ form.status }}
+                            {{ form.status.errors }}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label">Address</label>
+                        {{ form.address }}
+                        {{ form.address.errors }}
+                    </div>
+                    
+                    <h5 class="mb-3 border-bottom pb-2 text-danger">Medical Information</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Medical History</label>
+                        <div class="form-text text-muted mb-1">{{ form.medical_history.help_text }}</div>
+                        {{ form.medical_history }}
+                        {{ form.medical_history.errors }}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label text-danger">Allergies</label>
+                        <div class="form-text text-muted mb-1">{{ form.allergies.help_text }}</div>
+                        {{ form.allergies }}
+                        {{ form.allergies.errors }}
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'patient_list' %}" class="btn btn-light me-md-2">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Save Patient Record</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

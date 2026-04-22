@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Start Prescription - Hospital Prescription System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Start New Prescription</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{% url 'prescription_list' %}" class="btn btn-sm btn-outline-secondary">
+            Cancel
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-4">
+                        <label class="form-label fs-5">Select Patient *</label>
+                        {{ form.patient }}
+                        {{ form.patient.errors }}
+                        <div class="form-text">Choose the patient for this prescription.</div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fs-5">Doctor's Notes (Optional)</label>
+                        {{ form.notes }}
+                        {{ form.notes.errors }}
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Start Prescription & Add Medicines</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

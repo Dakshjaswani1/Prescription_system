@@ -1,0 +1,305 @@
+HOSPITAL PRESCRIPTION MANAGEMENT SYSTEM
+Product Requirements Document (PRD)
+Version: 1.0
+Date: April 2026
+Table of Contents
+1. Executive Summary
+2. Project Overview
+3. Scope & Features
+4. Technical Stack
+5. Functional Requirements
+6. Database Design
+7. User Interface & Flow
+8. Non-Functional Requirements
+9. Development Timeline
+10. Success Metrics
+1. Executive Summary
+The Hospital Prescription Management System is a web-based application designed to digitize and streamline the prescription workflow in hospitals. Currently, doctors write prescriptions manually, which is time-consuming, error-prone, and inefficient for the receptionist and pharmacy staff. This system provides a centralized platform where doctors can create digital prescriptions, manage medicine inventory, maintain comprehensive patient records, and enforce role-based access control for security and compliance.
+This PRD outlines the core functionalities: Doctor Prescription Module, Medicine Inventory Management, Patient Records System, and Role-Based Access Control (RBAC). The system will be built using Django, Bootstrap, and SQLite3, making it lightweight, scalable, and easy to deploy in a hospital environment.
+2. Project Overview
+2.1 Objective
+Replace manual prescription writing with a digital, trackable system that improves efficiency, reduces errors, and provides better patient care through integrated medicine inventory and patient history management.
+2.2 Problem Statement
+Manual prescription writing is slow and error-prone
+No integrated medicine inventory tracking system
+Difficult to access patient medical history quickly
+No role-based access control leading to security concerns
+Lack of audit trail for compliance and accountability
+2.3 Solution Overview
+Digital prescription creation and management
+Real-time medicine inventory tracking with low-stock alerts
+Comprehensive patient records with medical history
+Role-based access control for doctors, receptionists, and admins
+Audit logs for all system actions and changes
+3. Scope & Features
+3.1 In Scope
+Doctor Prescription Module
+Medicine Inventory Management
+Patient Records System
+Role-Based Access Control (RBAC)
+User Management and Authentication
+Basic Reporting & Dashboard
+3.2 Out of Scope (Future Phases)
+Prescription workflow & status tracking
+Drug interaction checker
+SMS/Email notifications
+PDF prescription generation and printing
+Advanced analytics and billing integration
+Mobile app development
+4. Technical Stack
+4.1 Backend
+Framework: Django 4.2+
+Database: SQLite3 (default in Django)
+Authentication: Django's built-in auth system
+ORM: Django ORM for database operations
+4.2 Frontend
+Framework: Bootstrap 5.x
+HTML/CSS/JavaScript for UI
+Django Templates for server-side rendering
+Responsive design for desktop and tablets
+4.3 Development & Deployment
+Version Control: Git/GitHub
+Development Server: Django development server
+Production: Python with WSGI server (Gunicorn/uWSGI)
+Database: SQLite3 (easy to upgrade to PostgreSQL later)
+5. Functional Requirements
+5.1 Doctor Prescription Module
+FR-D1: Doctors can create new prescriptions
+FR-D2: Search and select medicines by name, strength, and manufacturer
+FR-D3: Add multiple medicines to a prescription with quantity and dosage instructions
+FR-D4: Save prescriptions as drafts before finalizing
+FR-D5: View list of all prescriptions created by the doctor
+FR-D6: View detailed information of previously created prescriptions
+FR-D7: Edit prescriptions in draft status
+FR-D8: Assign prescriptions to patients (with patient search functionality)
+FR-D9: Display drug interactions warnings (if implemented)
+FR-D10: Track creation timestamp and creator information
+5.2 Medicine Inventory Management
+FR-I1: Pharmacy admin can add new medicines to the system
+FR-I2: Record initial stock quantity, batch number, and expiry date
+FR-I3: Set minimum stock threshold for each medicine
+FR-I4: View current stock level for all medicines
+FR-I5: Automatically deduct stock when prescription is dispensed
+FR-I6: Display low-stock alert when quantity falls below minimum threshold
+FR-I7: View expiry date and days until expiration
+FR-I8: Flag medicines expiring within 30 days
+FR-I9: Log all inventory changes with timestamp and user information
+FR-I10: Search medicines by name, manufacturer, or batch number
+FR-I11: Generate stock report (current levels, usage trends)
+FR-I12: Manually adjust stock for damaged or lost medicines
+5.3 Patient Records System
+FR-P1: Admins can register new patients in the system
+FR-P2: Store patient demographics (name, age, gender, contact info)
+FR-P3: Record medical history (past illnesses, surgeries)
+FR-P4: Maintain list of known drug allergies and sensitivities
+FR-P5: Link prescriptions to patient records
+FR-P6: View complete prescription history for a patient
+FR-P7: Search patient by name, ID, or contact number
+FR-P8: Edit patient information (only by authorized staff)
+FR-P9: Display allergy warnings when opening patient record
+FR-P10: Mark patients as active or inactive (archived)
+5.4 Role-Based Access Control (RBAC)
+FR-R1: System supports three main roles: Doctor, Receptionist, Admin
+FR-R2: Doctor can create prescriptions and view own prescription history
+FR-R3: Receptionist can view prescriptions, update patient info, and manage dispensing
+FR-R4: Admin has full system access including user management and settings
+FR-R5: Implement role-based URL/view access control
+FR-R6: Prevent unauthorized access with login and session management
+FR-R7: Log all user activities for audit trail
+FR-R8: Admin can create, edit, and delete user accounts
+FR-R9: Implement password reset functionality
+FR-R10: Display current logged-in user information and role
+5.5 User Authentication & Session Management
+FR-A1: Users can log in with username/email and password
+FR-A2: Implement session timeout after 30 minutes of inactivity
+FR-A3: Password validation (minimum 8 characters, strong password rules)
+FR-A4: Secure password storage using Django's password hashing
+FR-A5: Users can log out explicitly
+FR-A6: Redirect unauthenticated users to login page
+6. Database Design
+6.1 Core Data Models
+The system uses the following core Django models:
+User: Extended Django User model with role field (Doctor, Receptionist, Admin)
+Patient: Stores patient demographics, medical history, and allergies
+Medicine: Master data for all available medicines
+MedicineStock: Tracks current quantity, expiry date, batch number
+Prescription: Stores prescription details linked to doctor and patient
+PrescriptionMedicine: Many-to-many relationship between prescription and medicines
+InventoryLog: Audit trail for all stock changes
+AuditLog: Log all system actions for compliance
+6.2 Data Model Relationships
+Key relationships:
+User (1) ── (Many) Prescription: One doctor creates many prescriptions
+Patient (1) ── (Many) Prescription: One patient has many prescriptions
+Prescription (Many) ── (Many) Medicine: Many-to-many with dosage info
+Medicine (1) ── (1) MedicineStock: One medicine has one stock record
+MedicineStock (1) ── (Many) InventoryLog: Stock changes are logged
+6.3 SQLite3 Database
+SQLite3 will be used for development and can be easily migrated to PostgreSQL for production. Django's ORM handles all database operations, making this transition seamless.
+7. User Interface & Flow
+7.1 Page Structure
+Navigation Bar: Logo, menu items based on role, user profile, logout
+Sidebar: Quick access to main features (Prescriptions, Patients, Inventory)
+Dashboard: Role-specific dashboard showing key metrics and quick actions
+Footer: Copyright, version info
+7.2 Key Pages by Role
+Doctor Role:
+Dashboard: Quick prescription creation, recent prescriptions
+Create Prescription: Form to select patient, add medicines, dosage
+Prescription List: View all prescriptions created by doctor
+Patient Search: Search patient records
+Profile: View and edit doctor profile
+Receptionist Role:
+Dashboard: Pending prescriptions, patient check-ins
+Patient Management: Register new patients, view patient records
+Prescription View: View all prescriptions (for all doctors)
+Inventory Status: Quick view of low-stock items
+Admin Role:
+Dashboard: System overview, user management shortcuts
+Medicine Management: Add/edit medicines, manage inventory
+User Management: Create users, assign roles, manage permissions
+Inventory Reports: Stock analysis, expiry tracking
+Audit Logs: View system activity and changes
+7.3 Bootstrap Components Used
+Navigation bar with dropdown menus
+Cards for displaying information
+Tables with pagination for lists
+Forms with validation feedback
+Modals for confirmations and alerts
+Badges for status indicators (low stock, expiring)
+Alerts for success/error messages
+Responsive layout for mobile viewing
+8. Non-Functional Requirements
+8.1 Performance
+Page load time: < 2 seconds for most pages
+Database response time: < 500ms for queries
+Support concurrent users: At least 50 simultaneous users
+Prescription search: Return results in < 1 second
+8.2 Security
+All passwords stored using Django's PBKDF2 hashing
+CSRF protection on all forms
+XSS (Cross-Site Scripting) prevention through Django templates
+SQL injection prevention via Django ORM
+HTTPS recommended for production (SSL/TLS)
+Session timeout after 30 minutes of inactivity
+Audit logging of all sensitive operations
+8.3 Scalability
+SQLite3 can handle ~100k records efficiently
+Easy migration path to PostgreSQL for larger deployments
+Stateless application design for horizontal scaling
+Database indexing on frequently searched fields
+8.4 Availability & Reliability
+System uptime target: 99% during business hours
+Daily automated database backups
+Error handling and logging for debugging
+Graceful degradation when errors occur
+8.5 Usability
+Intuitive navigation and clear labeling
+Consistent UI patterns across the application
+Help text and tooltips for complex features
+Responsive design for tablets and desktops
+Accessibility compliance (color contrast, keyboard navigation)
+8.6 Maintainability
+Clean, well-documented code following Django best practices
+Modular app structure (accounts, prescriptions, inventory, patients)
+Comprehensive comments and docstrings
+Version control with meaningful commit messages
+9. Development Timeline
+Estimated timeline: 8-12 weeks for MVP (Minimum Viable Product)
+Phase
+Duration
+Description
+Deliverable
+Phase 1: Setup & Planning
+1 week
+Project setup, database design, UI mockups
+Django project structure, data models
+Phase 2: Core Models
+2 weeks
+Implement User, Patient, Medicine, Prescription models
+Database migrations, basic CRUD
+Phase 3: Authentication & RBAC
+2 weeks
+User login, role-based access control, middleware
+Working login system with roles
+Phase 4: Doctor Module
+2 weeks
+Create prescription form, medicine selection, validation
+Functional prescription creation
+Phase 5: Inventory System
+2 weeks
+Medicine management, stock tracking, alerts
+Inventory dashboard with alerts
+Phase 6: Patient Records
+1 week
+Patient registration, history, allergy tracking
+Patient management interface
+Phase 7: UI/Frontend
+1 week
+Bootstrap styling, responsive design, user flows
+Polished UI across all pages
+Phase 8: Testing & Optimization
+1 week
+Unit testing, bug fixes, performance optimization
+Stable MVP ready for deployment
+10. Success Metrics
+10.1 Business Metrics
+Reduction in prescription creation time from 5 min (manual) to 2 min (digital)
+100% accuracy in medicine inventory tracking
+Zero stock-outs due to untracked usage
+All prescriptions are traceable with full audit trail
+Staff training time reduced to < 2 hours
+10.2 Technical Metrics
+System availability: > 99% uptime during business hours
+Page load time: < 2 seconds average
+Database query response: < 500ms
+Zero critical security vulnerabilities
+Code test coverage: > 70%
+10.3 User Adoption
+80% of doctors using the system within 2 weeks
+95% user satisfaction rating
+< 5 support tickets per week after launch
+Completion of at least 50 prescriptions per day (baseline)
+Appendix A: Detailed Feature Breakdown
+Doctor Prescription Module - Detailed Flow
+Login with doctor credentials
+Navigate to 'Create Prescription'
+Search and select patient
+Search for medicines by name/strength
+Add medicine with quantity and dosage instructions
+Review all medicines added
+Confirm and submit prescription
+Receive confirmation message with prescription ID
+System automatically logs the action in audit trail
+Medicine Inventory - Stock Deduction Process
+When prescription is marked as 'Dispensed':
+System automatically reduces medicine stock
+Creates inventory log entry with timestamp and user
+Checks if stock is now below minimum threshold
+If low: Displays alert to pharmacy staff
+Admin can manually adjust stock for returns/damage
+Patient Records - Data Stored
+Demographics: Name, ID, Age, Gender, Contact Number, Address
+Medical History: Past illnesses, surgeries, chronic conditions
+Allergies: Known drug allergies and sensitivities
+Prescriptions: Complete prescription history with dates
+Status: Active/Inactive patient status
+Appendix B: Technology Justification
+Why Django?
+Rapid development with built-in ORM and admin panel
+Strong security features (CSRF, XSS protection, password hashing)
+Excellent documentation and large community
+Built-in authentication and permission system
+Batteries-included approach reduces development time
+Why Bootstrap?
+Professional, responsive UI out of the box
+Mobile-friendly without extra work
+Extensive component library (buttons, forms, tables, modals)
+Consistent across browsers
+Easy to customize with CSS
+Why SQLite3?
+Zero configuration - no setup required
+Perfect for MVP and development phase
+Easy migration to PostgreSQL if needed
+Sufficient for hospital with < 1000 employees
+Single file database - easy backups

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Hospital Prescription System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Dashboard</h1>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Welcome, {{ user.username }}</h5>
+                <p class="card-text">You are logged in as a <strong>{{ user.role }}</strong>.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    {% if user.role == 'Doctor' %}
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body p-4">
+                <i class="bi bi-prescription2 display-4 mb-3 d-block text-white opacity-75"></i>
+                <h4 class="card-title fw-bold">My Prescriptions</h4>
+                <p class="card-text mb-4">Create and manage your patient prescriptions.</p>
+                <a href="{% url 'prescription_list' %}" class="btn btn-light fw-bold text-primary px-4 rounded-pill">View Prescriptions <i class="bi bi-arrow-right ms-1"></i></a>
+            </div>
+        </div>
+    </div>
+    {% elif user.role == 'Receptionist' %}
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body p-4">
+                <i class="bi bi-people-fill display-4 mb-3 d-block text-white opacity-75"></i>
+                <h4 class="card-title fw-bold">Patients</h4>
+                <p class="card-text mb-4">Manage patient registrations and history.</p>
+                <a href="{% url 'patient_list' %}" class="btn btn-light fw-bold text-success px-4 rounded-pill">Manage Patients <i class="bi bi-arrow-right ms-1"></i></a>
+            </div>
+        </div>
+    </div>
+    {% elif user.role == 'Admin' %}
+    <div class="col-md-4">
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-body p-4">
+                <i class="bi bi-box-seam-fill display-4 mb-3 d-block text-white opacity-75"></i>
+                <h4 class="card-title fw-bold">Inventory Alerts</h4>
+                <p class="card-text mb-4">Check low stock medicines.</p>
+                <a href="{% url 'medicine_list' %}" class="btn btn-light fw-bold text-danger px-4 rounded-pill">View Inventory <i class="bi bi-arrow-right ms-1"></i></a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

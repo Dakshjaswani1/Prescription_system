@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up - Hospital Prescription System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-4 fade-in mb-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow">
+            <div class="card-header bg-success text-center py-4">
+                <i class="bi bi-person-plus-fill display-4 text-white opacity-75 mb-2 d-block"></i>
+                <h3 class="mb-0 text-white fw-bold">Create Account</h3>
+                <p class="text-white-50 mb-0 mt-1">Join the Hospital Management System</p>
+            </div>
+            <div class="card-body p-4 p-md-5">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger shadow-sm rounded-3">
+                            {% for error in form.non_field_errors %}
+                                <i class="bi bi-exclamation-octagon-fill me-2"></i> {{ error }}<br>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <div class="row">
+                        {% for field in form %}
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label fw-semibold text-muted">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <div class="form-text small">{{ field.help_text }}</div>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                    <div class="text-danger small mt-1"><i class="bi bi-exclamation-circle"></i> {{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success btn-lg w-100 fw-bold mt-4 mb-3 shadow-sm">
+                        <i class="bi bi-check-circle me-2"></i> Register Account
+                    </button>
+                    
+                    <div class="text-center text-muted">
+                        Already have an account? <a href="{% url 'login' %}" class="text-success fw-bold text-decoration-none">Log in here</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
